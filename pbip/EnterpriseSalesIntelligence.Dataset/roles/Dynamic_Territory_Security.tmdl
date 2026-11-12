@@ -1,0 +1,4 @@
+role Dynamic_Territory_Security
+	modelPermission: read
+
+	tablePermission UserSecurityMapping = [UserEmail] == USERPRINCIPALNAME() || [TerritoryKey] == 0

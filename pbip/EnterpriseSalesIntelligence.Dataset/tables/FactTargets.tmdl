@@ -1,0 +1,77 @@
+table FactTargets
+
+	measure 'Total Revenue Target' = 
+		SUM(FactTargets[RevenueTarget])
+		formatString: \$#,##0.00;(\$#,##0.00);"-"
+
+	measure 'Total Profit Target' = 
+		SUM(FactTargets[ProfitTarget])
+		formatString: \$#,##0.00;(\$#,##0.00);"-"
+
+	measure 'Revenue Target Variance $' = 
+		[Total Net Revenue] - [Total Revenue Target]
+		formatString: +\$#,##0.00;-\$#,##0.00;"-"
+
+	measure 'Revenue Target Attainment %' = 
+		DIVIDE([Total Net Revenue], [Total Revenue Target], BLANK())
+		formatString: 0.0%
+
+	measure 'Profit Target Attainment %' = 
+		DIVIDE([Total Gross Profit], [Total Profit Target], BLANK())
+		formatString: 0.0%
+
+	column TargetKey
+		dataType: int64
+		isKey
+		sourceColumn: TargetKey
+
+	column TargetDate
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		sourceColumn: TargetDate
+
+	column DateKey
+		dataType: int64
+		sourceColumn: DateKey
+
+	column YearMonth
+		dataType: string
+		sourceColumn: YearMonth
+
+	column TerritoryKey
+		dataType: int64
+		sourceColumn: TerritoryKey
+
+	column SalespersonKey
+		dataType: int64
+		sourceColumn: SalespersonKey
+
+	column RevenueTarget
+		dataType: double
+		formatString: \$#,##0.00;(\$#,##0.00);"-"
+		sourceColumn: RevenueTarget
+
+	column ProfitTarget
+		dataType: double
+		formatString: \$#,##0.00;(\$#,##0.00);"-"
+		sourceColumn: ProfitTarget
+
+	partition FactTargets = m
+		mode: import
+		source = 
+			let
+			    SourcePath = "data/processed/FactTargets.csv",
+			    Source = Csv.Document(File.Contents(SourcePath), [Delimiter=",", Columns=8, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+			    PromoteHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    ChangeTypes = Table.TransformColumnTypes(PromoteHeaders, {
+			        {"TargetKey", Int64.Type},
+			        {"TargetDate", type date},
+			        {"DateKey", Int64.Type},
+			        {"YearMonth", type text},
+			        {"TerritoryKey", Int64.Type},
+			        {"SalespersonKey", Int64.Type},
+			        {"RevenueTarget", type number},
+			        {"ProfitTarget", type number}
+			    })
+			in
+			    ChangeTypes

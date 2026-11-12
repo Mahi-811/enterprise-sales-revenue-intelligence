@@ -1,0 +1,14 @@
+UserEmail,TerritoryKey,Role
+sarah.jenkins@enterprisegroup.com,1,Sales Representative
+david.chen@enterprisegroup.com,1,Sales Representative
+elena.rostova@enterprisegroup.com,2,Sales Representative
+michael.scott@enterprisegroup.com,2,Sales Representative
+marcus.vance@enterprisegroup.com,1,Regional Manager Americas
+marcus.vance@enterprisegroup.com,2,Regional Manager Americas
+marcus.vance@enterprisegroup.com,6,Regional Manager Americas
+astrid.lindgren@enterprisegroup.com,3,Regional Manager EMEA
+astrid.lindgren@enterprisegroup.com,4,Regional Manager EMEA
+taro.tanaka@enterprisegroup.com,5,Regional Manager APAC
+carlos.silva@enterprisegroup.com,6,Sales Representative
+lucia.morales@enterprisegroup.com,6,Sales Representative
+executive@enterprisegroup.com,0,Executive Global Admin

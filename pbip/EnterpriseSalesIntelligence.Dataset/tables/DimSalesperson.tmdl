@@ -1,0 +1,44 @@
+table DimSalesperson
+
+	column SalespersonKey
+		dataType: int64
+		isKey
+		sourceColumn: SalespersonKey
+
+	column SalespersonID
+		dataType: string
+		sourceColumn: SalespersonID
+
+	column SalespersonName
+		dataType: string
+		sourceColumn: SalespersonName
+
+	column Email
+		dataType: string
+		sourceColumn: Email
+
+	column Manager
+		dataType: string
+		sourceColumn: Manager
+
+	column TerritoryKey
+		dataType: int64
+		sourceColumn: TerritoryKey
+
+	partition DimSalesperson = m
+		mode: import
+		source = 
+			let
+			    SourcePath = "data/processed/DimSalesperson.csv",
+			    Source = Csv.Document(File.Contents(SourcePath), [Delimiter=",", Columns=6, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+			    PromoteHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    ChangeTypes = Table.TransformColumnTypes(PromoteHeaders, {
+			        {"SalespersonKey", Int64.Type},
+			        {"SalespersonID", type text},
+			        {"SalespersonName", type text},
+			        {"Email", type text},
+			        {"Manager", type text},
+			        {"TerritoryKey", Int64.Type}
+			    })
+			in
+			    ChangeTypes

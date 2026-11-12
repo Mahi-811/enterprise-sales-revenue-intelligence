@@ -1,0 +1,56 @@
+// ============================================================================
+// Enterprise Sales & Revenue Intelligence System
+// 02_profitability_measures.dax: Margin & Profitability Metrics
+// SRS Reference: Section 4 (FR-05) & RP-05 (Revenue & Profitability)
+// ============================================================================
+
+[Total Gross Profit] = 
+[Total Net Revenue] - [Total Cost of Goods Sold]
+/*
+Format: \$#,##0.00;(\$#,##0.00);"-"
+Description: Net sales revenue remaining after deducting the cost of goods sold.
+*/
+
+[Gross Margin %] = 
+DIVIDE(
+    [Total Gross Profit],
+    [Total Net Revenue],
+    BLANK()
+)
+/*
+Format: 0.0%
+Description: Profitability ratio expressing gross profit as a percentage of net revenue. Returns BLANK when revenue is zero to avoid division errors.
+*/
+
+[Cost Ratio %] = 
+DIVIDE(
+    [Total Cost of Goods Sold],
+    [Total Net Revenue],
+    BLANK()
+)
+/*
+Format: 0.0%
+Description: Proportion of net revenue consumed by product acquisition and manufacturing costs.
+*/
+
+[Profit per Unit] = 
+DIVIDE(
+    [Total Gross Profit],
+    [Total Units Sold],
+    BLANK()
+)
+/*
+Format: \$#,##0.00;(\$#,##0.00);"-"
+Description: Average gross profit achieved per individual unit delivered.
+*/
+
+[Profit per Order] = 
+DIVIDE(
+    [Total Gross Profit],
+    [Distinct Order Count],
+    BLANK()
+)
+/*
+Format: \$#,##0.00;(\$#,##0.00);"-"
+Description: Average gross profit generated per customer purchase order.
+*/

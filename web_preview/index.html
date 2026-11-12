@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enterprise Sales & Revenue Intelligence | Power BI Interactive Preview</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    .tab-active { border-bottom: 3px solid #2563eb; color: #1d4ed8; font-weight: 600; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- TOP HEADER -->
+  <header class="bg-slate-900 text-white shadow-md border-b border-slate-800 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="bg-blue-600 p-2 rounded-lg shadow-sm">
+          <i data-lucide="bar-chart-3" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+            Enterprise Sales & Revenue Intelligence
+            <span class="text-xs bg-blue-500/20 text-blue-300 font-medium px-2 py-0.5 rounded border border-blue-400/30">Power BI Spec v1.0</span>
+          </h1>
+          <p class="text-xs text-slate-400">Governed Star Schema Semantic Model | Live Interactive Report Suite</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4 text-xs">
+        <div class="hidden sm:flex items-center gap-1.5 bg-slate-800/80 px-3 py-1.5 rounded-md border border-slate-700 text-slate-300">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span>Last Refresh: <strong id="header-refresh-time" class="text-white">2026-11-12 18:00 UTC</strong></span>
+        </div>
+        <div class="flex items-center gap-1.5 bg-emerald-950/60 border border-emerald-500/30 text-emerald-300 px-3 py-1.5 rounded-md">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Semantic Model: Reconciled (100%)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORT PAGES NAVIGATION -->
+    <div class="bg-slate-800/90 border-t border-slate-700/60 px-4 sm:px-8">
+      <nav class="max-w-7xl mx-auto flex space-x-1 sm:space-x-6 overflow-x-auto text-xs sm:text-sm font-medium py-1">
+        <button onclick="switchTab('rp01')" id="nav-rp01" class="tab-btn px-3 py-2 text-blue-400 border-b-2 border-blue-500 flex items-center gap-2">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i> RP-01 Executive Overview
+        </button>
+        <button onclick="switchTab('rp02')" id="nav-rp02" class="tab-btn px-3 py-2 text-slate-400 hover:text-white border-b-2 border-transparent flex items-center gap-2">
+          <i data-lucide="trending-up" class="w-4 h-4"></i> RP-02 Sales Performance
+        </button>
+        <button onclick="switchTab('rp03')" id="nav-rp03" class="tab-btn px-3 py-2 text-slate-400 hover:text-white border-b-2 border-transparent flex items-center gap-2">
+          <i data-lucide="box" class="w-4 h-4"></i> RP-03 Product Performance
+        </button>
+        <button onclick="switchTab('rp04')" id="nav-rp04" class="tab-btn px-3 py-2 text-slate-400 hover:text-white border-b-2 border-transparent flex items-center gap-2">
+          <i data-lucide="users" class="w-4 h-4"></i> RP-04 Customer Insights
+        </button>
+        <button onclick="switchTab('rp05')" id="nav-rp05" class="tab-btn px-3 py-2 text-slate-400 hover:text-white border-b-2 border-transparent flex items-center gap-2">
+          <i data-lucide="pie-chart" class="w-4 h-4"></i> RP-05 Revenue & Margin
+        </button>
+        <button onclick="switchTab('rp06')" id="nav-rp06" class="tab-btn px-3 py-2 text-slate-400 hover:text-white border-b-2 border-transparent flex items-center gap-2">
+          <i data-lucide="table" class="w-4 h-4"></i> RP-06 Transaction Detail
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- FILTER SLICER BAR -->
+  <section class="bg-white border-b border-slate-200 shadow-sm sticky top-[95px] z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="font-semibold text-slate-600 flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
+          <i data-lucide="filter" class="w-3.5 h-3.5 text-blue-600"></i> Global Slicers:
+        </span>
+
+        <!-- Year Filter -->
+        <div class="flex items-center gap-1.5">
+          <label class="text-slate-500 font-medium">Year:</label>
+          <select id="filter-year" onchange="applyFilters()" class="bg-slate-50 border border-slate-300 text-slate-800 rounded px-2.5 py-1 text-xs focus:ring-1 focus:ring-blue-500 outline-none">
+            <option value="All">All Years (2024-2026)</option>
+            <option value="2026">2026 (YTD)</option>
+            <option value="2025">2025 (Full Year)</option>
+            <option value="2024">2024 (Baseline)</option>
+          </select>
+        </div>
+
+        <!-- Region Filter -->
+        <div class="flex items-center gap-1.5">
+          <label class="text-slate-500 font-medium">Region:</label>
+          <select id="filter-region" onchange="applyFilters()" class="bg-slate-50 border border-slate-300 text-slate-800 rounded px-2.5 py-1 text-xs focus:ring-1 focus:ring-blue-500 outline-none">
+            <option value="All">All Regions (Global)</option>
+            <option value="Americas">Americas (NA & LATAM)</option>
+            <option value="EMEA">EMEA (Central & UK)</option>
+            <option value="APAC">APAC (Asia-Pacific)</option>
+          </select>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="flex items-center gap-1.5">
+          <label class="text-slate-500 font-medium">Category:</label>
+          <select id="filter-category" onchange="applyFilters()" class="bg-slate-50 border border-slate-300 text-slate-800 rounded px-2.5 py-1 text-xs focus:ring-1 focus:ring-blue-500 outline-none">
+            <option value="All">All Categories</option>
+            <option value="Technology">Technology</option>
+            <option value="Office Solutions">Office Solutions</option>
+            <option value="Industrial & Hardware">Industrial & Hardware</option>
+            <option value="Consumables & Supplies">Consumables & Supplies</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="resetFilters()" class="text-slate-500 hover:text-blue-600 bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded text-xs transition flex items-center gap-1">
+          <i data-lucide="rotate-ccw" class="w-3 h-3"></i> Clear Filters
+        </button>
+        <span id="active-filter-badge" class="bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-0.5 rounded-full text-[11px] font-medium">
+          Context: Global Fleet
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN REPORT CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
+
+    <!-- KPI SUMMARY CARDS (PRESENT ON ALL EXECUTIVE VIEWS) -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5 mb-6">
+      <!-- Net Revenue -->
+      <div class="bg-white rounded-xl p-3.5 border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between text-slate-500 text-xs mb-1">
+          <span class="font-medium">Total Net Revenue</span>
+          <i data-lucide="dollar-sign" class="w-4 h-4 text-blue-600"></i>
+        </div>
+        <div id="kpi-revenue" class="text-lg sm:text-xl font-bold text-slate-900">$0.00</div>
+        <div class="text-[11px] text-emerald-600 font-medium flex items-center gap-0.5 mt-0.5">
+          <i data-lucide="arrow-up-right" class="w-3 h-3"></i> +6.3% YoY Growth
+        </div>
+      </div>
+
+      <!-- Gross Profit -->
+      <div class="bg-white rounded-xl p-3.5 border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between text-slate-500 text-xs mb-1">
+          <span class="font-medium">Gross Profit</span>
+          <i data-lucide="trending-up" class="w-4 h-4 text-emerald-600"></i>
+        </div>
+        <div id="kpi-profit" class="text-lg sm:text-xl font-bold text-slate-900">$0.00</div>
+        <div id="kpi-margin" class="text-[11px] text-slate-500 font-medium mt-0.5">Margin: 39.3%</div>
+      </div>
+
+      <!-- Gross Margin % -->
+      <div class="bg-white rounded-xl p-3.5 border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between text-slate-500 text-xs mb-1">
+          <span class="font-medium">Gross Margin %</span>
+          <i data-lucide="percent" class="w-4 h-4 text-indigo-600"></i>
+        </div>
+        <div id="kpi-margin-pct" class="text-lg sm:text-xl font-bold text-slate-900">0.0%</div>
+        <div class="text-[11px] text-emerald-600 font-medium mt-0.5">Within Target Band</div>
+      </div>
+
+      <!-- Distinct Orders -->
+      <div class="bg-white rounded-xl p-3.5 border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between text-slate-500 text-xs mb-1">
+          <span class="font-medium">Distinct Orders</span>
+          <i data-lucide="shopping-bag" class="w-4 h-4 text-amber-600"></i>
+        </div>
+        <div id="kpi-orders" class="text-lg sm:text-xl font-bold text-slate-900">0</div>
+        <div id="kpi-units" class="text-[11px] text-slate-500 font-medium mt-0.5">Units: 0</div>
+      </div>
+
+      <!-- Average Order Value -->
+      <div class="bg-white rounded-xl p-3.5 border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between text-slate-500 text-xs mb-1">
+          <span class="font-medium">Average Order Value</span>
+          <i data-lucide="receipt" class="w-4 h-4 text-purple-600"></i>
+        </div>
+        <div id="kpi-aov" class="text-lg sm:text-xl font-bold text-slate-900">$0.00</div>
+        <div class="text-[11px] text-slate-500 font-medium mt-0.5">Per Distinct Order</div>
+      </div>
+
+      <!-- Target Quota Attainment -->
+      <div class="bg-white rounded-xl p-3.5 border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between text-slate-500 text-xs mb-1">
+          <span class="font-medium">Target Attainment</span>
+          <i data-lucide="target" class="w-4 h-4 text-rose-600"></i>
+        </div>
+        <div id="kpi-attainment" class="text-lg sm:text-xl font-bold text-slate-900">0.0%</div>
+        <div id="kpi-target-status" class="text-[11px] text-emerald-600 font-medium mt-0.5">Overachieved</div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB RP-01: EXECUTIVE OVERVIEW ==================== -->
+    <div id="tab-rp01" class="tab-content space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Monthly Revenue vs Quota Trend Chart -->
+        <div class="lg:col-span-2 bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="font-bold text-slate-900 text-sm">Monthly Revenue Trend vs Target Quota</h3>
+              <p class="text-xs text-slate-500">Net Sales Revenue vs Commercial Assigned Quota (2024 - 2026)</p>
+            </div>
+            <span class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded font-medium">Monthly Grain</span>
+          </div>
+          <div class="h-72 w-full">
+            <canvas id="chart-monthly-trend"></canvas>
+          </div>
+        </div>
+
+        <!-- Regional Contribution Doughnut -->
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="font-bold text-slate-900 text-sm">Revenue by Region</h3>
+              <p class="text-xs text-slate-500">Contribution split across Americas, EMEA & APAC</p>
+            </div>
+            <i data-lucide="globe" class="w-4 h-4 text-slate-400"></i>
+          </div>
+          <div class="h-72 flex items-center justify-center">
+            <canvas id="chart-regional"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Performance & Top Products -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Category Breakdown -->
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <h3 class="font-bold text-slate-900 text-sm mb-1">Revenue & Margin by Category</h3>
+          <p class="text-xs text-slate-500 mb-4">Net Revenue and Gross Margin % across Product Categories</p>
+          <div class="h-64">
+            <canvas id="chart-category"></canvas>
+          </div>
+        </div>
+
+        <!-- Top Selling Products Table -->
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <div>
+                <h3 class="font-bold text-slate-900 text-sm">Top Performing Products</h3>
+                <p class="text-xs text-slate-500">Ranked by Net Revenue Contribution</p>
+              </div>
+              <span class="text-xs text-blue-600 font-medium">Pareto Analysis</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead>
+                  <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[10px]">
+                    <th class="pb-2">Product Name</th>
+                    <th class="pb-2">Category</th>
+                    <th class="pb-2 text-right">Revenue</th>
+                    <th class="pb-2 text-right">Margin %</th>
+                  </tr>
+                </thead>
+                <tbody id="top-products-table" class="divide-y divide-slate-100 text-slate-700">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB RP-02: SALES PERFORMANCE ==================== -->
+    <div id="tab-rp02" class="tab-content hidden space-y-6">
+      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="font-bold text-slate-900 text-base">Salesperson Performance & Quota Attainment</h3>
+            <p class="text-xs text-slate-500">Commercial actuals vs quota target across 12 account representatives</p>
+          </div>
+          <div class="flex items-center gap-2 text-xs">
+            <span class="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">🟢 &ge; 100% Exceeded</span>
+            <span class="inline-flex items-center gap-1 text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">🟡 85-99% On Track</span>
+            <span class="inline-flex items-center gap-1 text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">🔴 &lt; 85% Behind</span>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="bg-slate-50 border-y border-slate-200 text-slate-500 uppercase tracking-wider text-[10px]">
+                <th class="py-2.5 px-3">Salesperson</th>
+                <th class="py-2.5 px-3">Region</th>
+                <th class="py-2.5 px-3 text-right">Actual Revenue</th>
+                <th class="py-2.5 px-3 text-right">Target Quota</th>
+                <th class="py-2.5 px-3 text-right">Variance ($)</th>
+                <th class="py-2.5 px-3 text-center">Attainment %</th>
+                <th class="py-2.5 px-3 text-center">Status</th>
+              </tr>
+            </thead>
+            <tbody id="salesperson-table" class="divide-y divide-slate-100 text-slate-700">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB RP-03: PRODUCT PERFORMANCE ==================== -->
+    <div id="tab-rp03" class="tab-content hidden space-y-6">
+      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+        <h3 class="font-bold text-slate-900 text-base mb-1">Product Catalog Performance & Margins</h3>
+        <p class="text-xs text-slate-500 mb-4">Complete breakdown across all 32 commercial SKUs</p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="bg-slate-50 border-y border-slate-200 text-slate-500 uppercase tracking-wider text-[10px]">
+                <th class="py-2.5 px-3">SKU Code</th>
+                <th class="py-2.5 px-3">Product Title</th>
+                <th class="py-2.5 px-3">Category</th>
+                <th class="py-2.5 px-3 text-right">Units Sold</th>
+                <th class="py-2.5 px-3 text-right">Net Revenue</th>
+                <th class="py-2.5 px-3 text-right">Gross Profit</th>
+                <th class="py-2.5 px-3 text-right">Gross Margin %</th>
+              </tr>
+            </thead>
+            <tbody id="full-product-table" class="divide-y divide-slate-100 text-slate-700">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB RP-04: CUSTOMER INSIGHTS ==================== -->
+    <div id="tab-rp04" class="tab-content hidden space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <h3 class="font-bold text-slate-900 text-sm mb-1">Revenue by Customer Segment</h3>
+          <p class="text-xs text-slate-500 mb-4">Corporate vs Enterprise B2B vs Consumer vs Home Office</p>
+          <div class="h-64">
+            <canvas id="chart-segments"></canvas>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <h3 class="font-bold text-slate-900 text-sm mb-1">Commercial Segment Metrics</h3>
+          <p class="text-xs text-slate-500 mb-4">Account penetration, orders and profitability</p>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="border-b border-slate-200 text-slate-500 uppercase tracking-wider text-[10px]">
+                  <th class="pb-2">Segment</th>
+                  <th class="pb-2 text-right">Accounts</th>
+                  <th class="pb-2 text-right">Orders</th>
+                  <th class="pb-2 text-right">Net Revenue</th>
+                  <th class="pb-2 text-right">Profit</th>
+                </tr>
+              </thead>
+              <tbody id="segment-table" class="divide-y divide-slate-100 text-slate-700">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB RP-05: REVENUE & PROFITABILITY ==================== -->
+    <div id="tab-rp05" class="tab-content hidden space-y-6">
+      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+        <h3 class="font-bold text-slate-900 text-base mb-1">Financial Revenue Waterfall / Bridge Analysis</h3>
+        <p class="text-xs text-slate-500 mb-6">Accounting reconciliation from Gross Billed Sales down to Gross Profit</p>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-5 gap-4 text-center">
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div class="text-xs font-semibold text-blue-800 uppercase">Gross Sales</div>
+            <div id="wf-gross" class="text-lg font-bold text-blue-900 mt-2">$0.00</div>
+            <div class="text-[11px] text-blue-600 mt-1">100.0% of List</div>
+          </div>
+          <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+            <div class="text-xs font-semibold text-amber-800 uppercase">(-) Discounts</div>
+            <div id="wf-disc" class="text-lg font-bold text-amber-900 mt-2">$0.00</div>
+            <div id="wf-disc-pct" class="text-[11px] text-amber-600 mt-1">4.5% Rate</div>
+          </div>
+          <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
+            <div class="text-xs font-semibold text-indigo-800 uppercase">(=) Net Revenue</div>
+            <div id="wf-net" class="text-lg font-bold text-indigo-900 mt-2">$0.00</div>
+            <div class="text-[11px] text-indigo-600 mt-1">Top-line Basis</div>
+          </div>
+          <div class="bg-rose-50 border border-rose-200 rounded-lg p-4">
+            <div class="text-xs font-semibold text-rose-800 uppercase">(-) Cost of Goods</div>
+            <div id="wf-cogs" class="text-lg font-bold text-rose-900 mt-2">$0.00</div>
+            <div id="wf-cogs-pct" class="text-[11px] text-rose-600 mt-1">60.7% Cost Basis</div>
+          </div>
+          <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-4">
+            <div class="text-xs font-semibold text-emerald-800 uppercase">(=) Gross Profit</div>
+            <div id="wf-profit" class="text-lg font-bold text-emerald-900 mt-2">$0.00</div>
+            <div id="wf-margin-pct" class="text-[11px] text-emerald-700 font-semibold mt-1">39.3% Margin</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB RP-06: TRANSACTION DETAIL ==================== -->
+    <div id="tab-rp06" class="tab-content hidden space-y-6">
+      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+          <div>
+            <h3 class="font-bold text-slate-900 text-base">Auditable Transaction Line Records</h3>
+            <p class="text-xs text-slate-500">Order-line level data grain with search and export capabilities</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <input type="text" id="tx-search" oninput="filterTransactions()" placeholder="Search Order ID, Customer, Product..." class="bg-slate-50 border border-slate-300 text-slate-800 rounded px-3 py-1.5 text-xs focus:ring-1 focus:ring-blue-500 outline-none w-64">
+            <button onclick="exportTxToCSV()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-xs font-medium transition flex items-center gap-1.5 shadow-sm">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i> Export CSV
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="bg-slate-50 border-y border-slate-200 text-slate-500 uppercase tracking-wider text-[10px]">
+                <th class="py-2.5 px-3">Line ID</th>
+                <th class="py-2.5 px-3">Order ID</th>
+                <th class="py-2.5 px-3">Date</th>
+                <th class="py-2.5 px-3">Customer</th>
+                <th class="py-2.5 px-3">Product</th>
+                <th class="py-2.5 px-3">Region</th>
+                <th class="py-2.5 px-3 text-right">Qty</th>
+                <th class="py-2.5 px-3 text-right">Net Revenue</th>
+                <th class="py-2.5 px-3 text-right">Gross Profit</th>
+              </tr>
+            </thead>
+            <tbody id="transaction-table" class="divide-y divide-slate-100 text-slate-700">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div>Enterprise Sales & Revenue Intelligence System | Microsoft Power BI Engineering Portfolio</div>
+      <div class="flex items-center gap-4">
+        <span>Conforms to SRS v1.0</span>
+        <span>|</span>
+        <a href="https://github.com/Mahi-811" target="_blank" class="text-blue-600 hover:underline">GitHub: Mahi-811</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- APP SCRIPT -->
+  <script src="app.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

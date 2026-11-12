@@ -1,0 +1,13 @@
+SalespersonKey,SalespersonID,SalespersonName,Email,Manager,TerritoryKey
+1,SP-001,Sarah Jenkins,sarah.jenkins@enterprisegroup.com,Marcus Vance,1
+2,SP-002,David Chen,david.chen@enterprisegroup.com,Marcus Vance,1
+3,SP-003,Elena Rostova,elena.rostova@enterprisegroup.com,Marcus Vance,2
+4,SP-004,Michael Scott,michael.scott@enterprisegroup.com,Marcus Vance,2
+5,SP-005,Hans Gruber,hans.gruber@enterprisegroup.com,Astrid Lindgren,3
+6,SP-006,Chloe Dupont,chloe.dupont@enterprisegroup.com,Astrid Lindgren,3
+7,SP-007,Oliver Wright,oliver.wright@enterprisegroup.com,Astrid Lindgren,4
+8,SP-008,Emma Watson,emma.watson@enterprisegroup.com,Astrid Lindgren,4
+9,SP-009,Kenji Sato,kenji.sato@enterprisegroup.com,Taro Tanaka,5
+10,SP-010,Priya Sharma,priya.sharma@enterprisegroup.com,Taro Tanaka,5
+11,SP-011,Carlos Silva,carlos.silva@enterprisegroup.com,Marcus Vance,6
+12,SP-012,Lucia Morales,lucia.morales@enterprisegroup.com,Marcus Vance,6

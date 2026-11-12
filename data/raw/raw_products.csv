@@ -1,0 +1,33 @@
+ProductKey,ProductID,ProductName,Category,Subcategory,Brand,StandardCost,ListPrice
+1,PROD-001,Apex Pro 16 Laptop,Technology,Laptops & Workstations,ApexCore,1150.0,1850.0
+2,PROD-002,Apex UltraBook 14,Technology,Laptops & Workstations,ApexCore,780.0,1299.0
+3,PROD-003,Zenith CAD Workstation,Technology,Laptops & Workstations,Zenith,1850.0,2999.0
+4,PROD-004,CloudScale Enterprise Server X1,Technology,Storage & Servers,TitanCloud,3200.0,5200.0
+5,PROD-005,Titan Dual Rack SAN 24TB,Technology,Storage & Servers,TitanCloud,2100.0,3450.0
+6,PROD-006,OmniSwitch 48-Port PoE+,Technology,Networking,NetStream,620.0,1050.0
+7,PROD-007,FiberLink Enterprise Gateway,Technology,Networking,NetStream,450.0,780.0
+8,PROD-008,Quantum 4K UHD Conference Display,Technology,Audio & Visual,VisionTech,890.0,1499.0
+9,PROD-009,AeroMesh Ergonomic Task Chair,Office Solutions,Ergonomic Seating,ErgoForm,210.0,399.0
+10,PROD-010,Executive High-Back Leather Chair,Office Solutions,Ergonomic Seating,ErgoForm,320.0,599.0
+11,PROD-011,Vantage Motorized Sit-Stand Desk,Office Solutions,Executive Desks,Vantage,450.0,850.0
+12,PROD-012,Summit Modular Conference Table,Office Solutions,Executive Desks,Vantage,750.0,1400.0
+13,PROD-013,SteelLock 4-Drawer Fireproof Safe,Office Solutions,Storage Cabinets,SafeGuard,380.0,680.0
+14,PROD-014,SoundProof Modular Privacy Pod,Office Solutions,Workplace Acoustics,QuietSpace,2400.0,4200.0
+15,PROD-015,LaserMaster Heavy Duty Multifunction,Office Solutions,Printers & Scanners,PrintCo,520.0,899.0
+16,PROD-016,UltraClean Eco Office Shredder,Office Solutions,Printers & Scanners,PrintCo,140.0,260.0
+17,PROD-017,Heavy Duty Hydraulic Pallet Jack,Industrial & Hardware,Material Handling,TorquePro,280.0,520.0
+18,PROD-018,Electric Scissor Lift Platform,Industrial & Hardware,Material Handling,TorquePro,4100.0,6900.0
+19,PROD-019,ProTorq Industrial Cordless Drill Kit,Industrial & Hardware,Power Tools,TorquePro,130.0,245.0
+20,PROD-020,MaxVolt Brushless Rotary Hammer,Industrial & Hardware,Power Tools,VoltWorks,190.0,360.0
+21,PROD-021,MultiGas OSHA Air Quality Monitor,Industrial & Hardware,Safety Gear,SafeGuard,310.0,580.0
+22,PROD-022,ArcShield Auto-Darkening Welding Helmet,Industrial & Hardware,Safety Gear,SafeGuard,85.0,160.0
+23,PROD-023,Industrial Modular Tool Storage Cart,Industrial & Hardware,Storage Cabinets,TorquePro,480.0,890.0
+24,PROD-024,Precision Laser Measurement Suite,Industrial & Hardware,Inspection & Testing,VoltWorks,260.0,490.0
+25,PROD-025,Premium Multipurpose Laser Paper (Pallet),Consumables & Supplies,Paper & Media,PaperCraft,350.0,580.0
+26,PROD-026,High-Yield Toner Cartridge Pack (CMYK),Consumables & Supplies,Inks & Toners,PrintCo,180.0,340.0
+27,PROD-027,EcoGuard Industrial Shipping Wrap 6-Pack,Consumables & Supplies,Packaging,EcoPack,65.0,120.0
+28,PROD-028,Heavy Duty Corrugated Carton Pallet,Consumables & Supplies,Packaging,EcoPack,110.0,195.0
+29,PROD-029,Antimicrobial Surface Sanitizer Drum,Consumables & Supplies,Facilities,CleanPro,145.0,275.0
+30,PROD-030,Bulk Microfiber Cleaning Station Pack,Consumables & Supplies,Facilities,CleanPro,40.0,85.0
+31,PROD-031,Heavy-Duty Thermal Barcode Label Rolls,Consumables & Supplies,Paper & Media,PaperCraft,75.0,140.0
+32,PROD-032,Universal Power & Surge Tower 12-Outlets,Consumables & Supplies,Accessories,VoltWorks,32.0,68.0

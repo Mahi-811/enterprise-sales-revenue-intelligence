@@ -1,0 +1,4 @@
+role APAC_Region
+	modelPermission: read
+
+	tablePermission DimTerritory = [Region] == "APAC"

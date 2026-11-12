@@ -1,0 +1,140 @@
+table FactSales
+
+	measure 'Total Gross Sales' = 
+		SUMX(
+		    FactSales,
+		    FactSales[Quantity] * FactSales[UnitPrice]
+		)
+		formatString: \$#,##0.00;(\$#,##0.00);"-"
+
+	measure 'Total Discount Amount' = 
+		SUM(FactSales[DiscountAmount])
+		formatString: \$#,##0.00;(\$#,##0.00);"-"
+
+	measure 'Total Net Revenue' = 
+		[Total Gross Sales] - [Total Discount Amount]
+		formatString: \$#,##0.00;(\$#,##0.00);"-"
+
+	measure 'Total Cost of Goods Sold' = 
+		SUMX(
+		    FactSales,
+		    FactSales[Quantity] * FactSales[UnitCost]
+		)
+		formatString: \$#,##0.00;(\$#,##0.00);"-"
+
+	measure 'Total Gross Profit' = 
+		[Total Net Revenue] - [Total Cost of Goods Sold]
+		formatString: \$#,##0.00;(\$#,##0.00);"-"
+
+	measure 'Gross Margin %' = 
+		DIVIDE([Total Gross Profit], [Total Net Revenue], BLANK())
+		formatString: 0.0%
+
+	measure 'Distinct Order Count' = 
+		DISTINCTCOUNT(FactSales[OrderID])
+		formatString: #,##0
+
+	measure 'Total Units Sold' = 
+		SUM(FactSales[Quantity])
+		formatString: #,##0
+
+	measure 'Average Order Value' = 
+		DIVIDE([Total Net Revenue], [Distinct Order Count], BLANK())
+		formatString: \$#,##0.00;(\$#,##0.00);"-"
+
+	measure 'Revenue MTD' = 
+		TOTALMTD([Total Net Revenue], DimDate[Date])
+		formatString: \$#,##0.00;(\$#,##0.00);"-"
+
+	measure 'Revenue QTD' = 
+		TOTALQTD([Total Net Revenue], DimDate[Date])
+		formatString: \$#,##0.00;(\$#,##0.00);"-"
+
+	measure 'Revenue YTD' = 
+		TOTALYTD([Total Net Revenue], DimDate[Date])
+		formatString: \$#,##0.00;(\$#,##0.00);"-"
+
+	measure 'Revenue Prior Year (PY)' = 
+		CALCULATE([Total Net Revenue], SAMEPERIODLASTYEAR(DimDate[Date]))
+		formatString: \$#,##0.00;(\$#,##0.00);"-"
+
+	measure 'Revenue YoY Growth %' = 
+		DIVIDE([Total Net Revenue] - [Revenue Prior Year (PY)], [Revenue Prior Year (PY)], BLANK())
+		formatString: +0.0%;-0.0%;"0.0%"
+
+	column OrderLineID
+		dataType: int64
+		isKey
+		sourceColumn: OrderLineID
+
+	column OrderID
+		dataType: string
+		sourceColumn: OrderID
+
+	column OrderDate
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		sourceColumn: OrderDate
+
+	column DateKey
+		dataType: int64
+		sourceColumn: DateKey
+
+	column CustomerKey
+		dataType: int64
+		sourceColumn: CustomerKey
+
+	column ProductKey
+		dataType: int64
+		sourceColumn: ProductKey
+
+	column SalespersonKey
+		dataType: int64
+		sourceColumn: SalespersonKey
+
+	column TerritoryKey
+		dataType: int64
+		sourceColumn: TerritoryKey
+
+	column Quantity
+		dataType: int64
+		sourceColumn: Quantity
+
+	column UnitPrice
+		dataType: double
+		formatString: \$#,##0.00;(\$#,##0.00);"-"
+		sourceColumn: UnitPrice
+
+	column DiscountAmount
+		dataType: double
+		formatString: \$#,##0.00;(\$#,##0.00);"-"
+		sourceColumn: DiscountAmount
+
+	column UnitCost
+		dataType: double
+		formatString: \$#,##0.00;(\$#,##0.00);"-"
+		sourceColumn: UnitCost
+
+	partition FactSales = m
+		mode: import
+		source = 
+			let
+			    SourcePath = "data/processed/FactSales.csv",
+			    Source = Csv.Document(File.Contents(SourcePath), [Delimiter=",", Columns=12, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+			    PromoteHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    ChangeTypes = Table.TransformColumnTypes(PromoteHeaders, {
+			        {"OrderLineID", Int64.Type},
+			        {"OrderID", type text},
+			        {"OrderDate", type date},
+			        {"DateKey", Int64.Type},
+			        {"CustomerKey", Int64.Type},
+			        {"ProductKey", Int64.Type},
+			        {"SalespersonKey", Int64.Type},
+			        {"TerritoryKey", Int64.Type},
+			        {"Quantity", Int64.Type},
+			        {"UnitPrice", type number},
+			        {"DiscountAmount", type number},
+			        {"UnitCost", type number}
+			    })
+			in
+			    ChangeTypes

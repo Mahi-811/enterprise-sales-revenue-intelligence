@@ -1,0 +1,37 @@
+relationship c3638ca1-43fa-452b-a9ad-e5ca16d72ed1
+	fromColumn: FactSales.DateKey
+	toColumn: DimDate.DateKey
+
+relationship c3638ca1-43fa-452b-a9ad-e5ca16d72ed2
+	fromColumn: FactSales.CustomerKey
+	toColumn: DimCustomer.CustomerKey
+
+relationship c3638ca1-43fa-452b-a9ad-e5ca16d72ed3
+	fromColumn: FactSales.ProductKey
+	toColumn: DimProduct.ProductKey
+
+relationship c3638ca1-43fa-452b-a9ad-e5ca16d72ed4
+	fromColumn: FactSales.SalespersonKey
+	toColumn: DimSalesperson.SalespersonKey
+
+relationship c3638ca1-43fa-452b-a9ad-e5ca16d72ed5
+	fromColumn: FactSales.TerritoryKey
+	toColumn: DimTerritory.TerritoryKey
+
+relationship c3638ca1-43fa-452b-a9ad-e5ca16d72ed6
+	fromColumn: FactTargets.DateKey
+	toColumn: DimDate.DateKey
+
+relationship c3638ca1-43fa-452b-a9ad-e5ca16d72ed7
+	fromColumn: FactTargets.TerritoryKey
+	toColumn: DimTerritory.TerritoryKey
+
+relationship c3638ca1-43fa-452b-a9ad-e5ca16d72ed8
+	fromColumn: FactTargets.SalespersonKey
+	toColumn: DimSalesperson.SalespersonKey
+
+relationship c3638ca1-43fa-452b-a9ad-e5ca16d72ed9
+	fromColumn: UserSecurityMapping.TerritoryKey
+	toColumn: DimTerritory.TerritoryKey
+	crossFilteringBehavior: bothDirections
+	securityFilteringBehavior: bothDirections

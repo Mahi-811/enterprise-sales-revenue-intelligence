@@ -1,0 +1,68 @@
+table DimCustomer
+
+	measure 'Active Customer Count' = 
+		DISTINCTCOUNT(FactSales[CustomerKey])
+		formatString: #,##0
+
+	measure 'Average Revenue per Customer' = 
+		DIVIDE([Total Net Revenue], [Active Customer Count], BLANK())
+		formatString: \$#,##0.00;(\$#,##0.00);"-"
+
+	column CustomerKey
+		dataType: int64
+		isKey
+		sourceColumn: CustomerKey
+
+	column CustomerID
+		dataType: string
+		sourceColumn: CustomerID
+
+	column CustomerName
+		dataType: string
+		sourceColumn: CustomerName
+
+	column Segment
+		dataType: string
+		sourceColumn: Segment
+
+	column City
+		dataType: string
+		sourceColumn: City
+
+	column State
+		dataType: string
+		sourceColumn: State
+
+	column Country
+		dataType: string
+		sourceColumn: Country
+
+	column Region
+		dataType: string
+		sourceColumn: Region
+
+	column AcquisitionDate
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		sourceColumn: AcquisitionDate
+
+	partition DimCustomer = m
+		mode: import
+		source = 
+			let
+			    SourcePath = "data/processed/DimCustomer.csv",
+			    Source = Csv.Document(File.Contents(SourcePath), [Delimiter=",", Columns=9, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+			    PromoteHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    ChangeTypes = Table.TransformColumnTypes(PromoteHeaders, {
+			        {"CustomerKey", Int64.Type},
+			        {"CustomerID", type text},
+			        {"CustomerName", type text},
+			        {"Segment", type text},
+			        {"City", type text},
+			        {"State", type text},
+			        {"Country", type text},
+			        {"Region", type text},
+			        {"AcquisitionDate", type date}
+			    })
+			in
+			    ChangeTypes

@@ -1,0 +1,4 @@
+role Americas_Region
+	modelPermission: read
+
+	tablePermission DimTerritory = [Region] == "Americas"

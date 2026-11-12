@@ -1,0 +1,34 @@
+table DimTerritory
+
+	column TerritoryKey
+		dataType: int64
+		isKey
+		sourceColumn: TerritoryKey
+
+	column TerritoryName
+		dataType: string
+		sourceColumn: TerritoryName
+
+	column Region
+		dataType: string
+		sourceColumn: Region
+
+	column Country
+		dataType: string
+		sourceColumn: Country
+
+	partition DimTerritory = m
+		mode: import
+		source = 
+			let
+			    SourcePath = "data/processed/DimTerritory.csv",
+			    Source = Csv.Document(File.Contents(SourcePath), [Delimiter=",", Columns=4, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+			    PromoteHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    ChangeTypes = Table.TransformColumnTypes(PromoteHeaders, {
+			        {"TerritoryKey", Int64.Type},
+			        {"TerritoryName", type text},
+			        {"Region", type text},
+			        {"Country", type text}
+			    })
+			in
+			    ChangeTypes

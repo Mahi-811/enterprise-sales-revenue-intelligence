@@ -1,0 +1,53 @@
+// ============================================================================
+// Enterprise Sales & Revenue Intelligence System
+// 05_dynamic_formatting.dax: Customer Analytics & Dynamic Report UX
+// SRS Reference: Section 4 (FR-15, FR-16) & RP-04 (Customer Insights)
+// ============================================================================
+
+[Active Customer Count] = 
+DISTINCTCOUNT(FactSales[CustomerKey])
+/*
+Format: #,##0
+Description: Number of unique customer accounts with at least one transaction in the current filter context.
+*/
+
+[Average Revenue per Customer] = 
+DIVIDE(
+    [Total Net Revenue],
+    [Active Customer Count],
+    BLANK()
+)
+/*
+Format: \$#,##0.00;(\$#,##0.00);"-"
+Description: Average sales revenue generated per purchasing customer account.
+*/
+
+[Transactions per Customer] = 
+DIVIDE(
+    [Distinct Order Count],
+    [Active Customer Count],
+    BLANK()
+)
+/*
+Format: 0.0
+Description: Purchase frequency indicator (orders per active customer).
+*/
+
+[Selected Region Header] = 
+VAR SelRegion = SELECTEDVALUE(DimTerritory[Region], "All Regions (Global)")
+RETURN
+"Enterprise Intelligence | " & SelRegion
+
+[Filter Context Display] = 
+VAR SelYear = SELECTEDVALUE(DimDate[Year], "All Years")
+VAR SelRegion = SELECTEDVALUE(DimTerritory[Region], "Global Fleet")
+VAR SelCategory = SELECTEDVALUE(DimProduct[Category], "All Categories")
+RETURN
+"Period: " & SelYear & " | Region: " & SelRegion & " | Category: " & SelCategory
+
+[Empty State Message] = 
+IF(
+    ISBLANK([Total Net Revenue]),
+    "No transaction data found for the selected filter combination. Please clear or broaden slicers.",
+    BLANK()
+)

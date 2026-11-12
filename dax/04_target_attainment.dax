@@ -1,0 +1,80 @@
+// ============================================================================
+// Enterprise Sales & Revenue Intelligence System
+// 04_target_attainment.dax: Quota & Target Attainment Measures
+// SRS Reference: Section 4 (FR-11), Section 5.3 (FactTargets) & RP-02
+// ============================================================================
+
+[Total Revenue Target] = 
+SUM(FactTargets[RevenueTarget])
+/*
+Format: \$#,##0.00;(\$#,##0.00);"-"
+Description: Commercial sales quota target aggregated at supported grains (Month, Salesperson, Territory).
+*/
+
+[Total Profit Target] = 
+SUM(FactTargets[ProfitTarget])
+/*
+Format: \$#,##0.00;(\$#,##0.00);"-"
+Description: Gross profit target allocated to territories and sales personnel.
+*/
+
+[Revenue Target Variance $] = 
+VAR ActualSales = [Total Net Revenue]
+VAR TargetSales = [Total Revenue Target]
+RETURN
+IF(
+    NOT ISBLANK(TargetSales),
+    ActualSales - TargetSales,
+    BLANK()
+)
+/*
+Format: +\$#,##0.00;-\$#,##0.00;"-"
+Description: Absolute monetary variance of actual revenue against assigned quota. Positive denotes overachievement.
+*/
+
+[Revenue Target Attainment %] = 
+DIVIDE(
+    [Total Net Revenue],
+    [Total Revenue Target],
+    BLANK()
+)
+/*
+Format: 0.0%
+Description: Quota achievement percentage. Values >= 100% indicate target exceeded.
+*/
+
+[Profit Target Variance $] = 
+VAR ActualProfit = [Total Gross Profit]
+VAR TargetProfit = [Total Profit Target]
+RETURN
+IF(
+    NOT ISBLANK(TargetProfit),
+    ActualProfit - TargetProfit,
+    BLANK()
+)
+
+[Profit Target Attainment %] = 
+DIVIDE(
+    [Total Gross Profit],
+    [Total Profit Target],
+    BLANK()
+)
+/*
+Format: 0.0%
+Description: Target attainment percentage for gross profit.
+*/
+
+[Target Status Icon] = 
+VAR Attainment = [Revenue Target Attainment %]
+RETURN
+SWITCH(
+    TRUE(),
+    ISBLANK(Attainment), "⚪ No Target",
+    Attainment >= 1.05, "🟢 Overachieved (>105%)",
+    Attainment >= 0.95, "🟢 On Target (95-105%)",
+    Attainment >= 0.85, "🟡 At Risk (85-94%)",
+    "🔴 Critical Gap (<85%)"
+)
+/*
+Description: Visual status indicator for cards and matrix tables.
+*/

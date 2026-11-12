@@ -1,0 +1,128 @@
+// ============================================================================
+// Enterprise Sales & Revenue Intelligence System
+// 03_time_intelligence.dax: Time-Intelligence Measures
+// SRS Reference: Section 4 (FR-06) & Section 5.3 (DimDate Table Integration)
+// ============================================================================
+
+[Revenue MTD] = 
+TOTALMTD(
+    [Total Net Revenue],
+    DimDate[Date]
+)
+/*
+Format: \$#,##0.00;(\$#,##0.00);"-"
+Description: Month-to-date cumulative net sales revenue.
+*/
+
+[Revenue QTD] = 
+TOTALQTD(
+    [Total Net Revenue],
+    DimDate[Date]
+)
+/*
+Format: \$#,##0.00;(\$#,##0.00);"-"
+Description: Quarter-to-date cumulative net sales revenue.
+*/
+
+[Revenue YTD] = 
+TOTALYTD(
+    [Total Net Revenue],
+    DimDate[Date]
+)
+/*
+Format: \$#,##0.00;(\$#,##0.00);"-"
+Description: Year-to-date cumulative net sales revenue.
+*/
+
+[Revenue Prior Year (PY)] = 
+CALCULATE(
+    [Total Net Revenue],
+    SAMEPERIODLASTYEAR(DimDate[Date])
+)
+/*
+Format: \$#,##0.00;(\$#,##0.00);"-"
+Description: Net sales revenue achieved in the corresponding period of the previous calendar year.
+*/
+
+[Revenue YoY Growth $] = 
+VAR CurrentRevenue = [Total Net Revenue]
+VAR PriorYearRevenue = [Revenue Prior Year (PY)]
+RETURN
+IF(
+    NOT ISBLANK(CurrentRevenue) && NOT ISBLANK(PriorYearRevenue),
+    CurrentRevenue - PriorYearRevenue,
+    BLANK()
+)
+/*
+Format: +\$#,##0.00;-\$#,##0.00;"-"
+Description: Absolute monetary change in revenue compared to prior year period.
+*/
+
+[Revenue YoY Growth %] = 
+DIVIDE(
+    [Revenue YoY Growth $],
+    [Revenue Prior Year (PY)],
+    BLANK()
+)
+/*
+Format: +0.0%;-0.0%;"0.0%"
+Description: Percentage growth or contraction in revenue compared to prior year.
+*/
+
+[Revenue Prior Month (PM)] = 
+CALCULATE(
+    [Total Net Revenue],
+    DATEADD(DimDate[Date], -1, MONTH)
+)
+/*
+Format: \$#,##0.00;(\$#,##0.00);"-"
+Description: Net revenue achieved in the preceding calendar month.
+*/
+
+[Revenue MoM Growth $] = 
+VAR CurrentRev = [Total Net Revenue]
+VAR PriorMonthRev = [Revenue Prior Month (PM)]
+RETURN
+IF(
+    NOT ISBLANK(CurrentRev) && NOT ISBLANK(PriorMonthRev),
+    CurrentRev - PriorMonthRev,
+    BLANK()
+)
+
+[Revenue MoM Growth %] = 
+DIVIDE(
+    [Revenue MoM Growth $],
+    [Revenue Prior Month (PM)],
+    BLANK()
+)
+/*
+Format: +0.0%;-0.0%;"0.0%"
+Description: Month-over-month percentage growth in revenue.
+*/
+
+[Gross Profit YTD] = 
+TOTALYTD(
+    [Total Gross Profit],
+    DimDate[Date]
+)
+/*
+Format: \$#,##0.00;(\$#,##0.00);"-"
+Description: Cumulative Year-to-date gross profit.
+*/
+
+[Gross Profit Prior Year (PY)] = 
+CALCULATE(
+    [Total Gross Profit],
+    SAMEPERIODLASTYEAR(DimDate[Date])
+)
+
+[Gross Profit YoY Growth %] = 
+DIVIDE(
+    [Total Gross Profit] - [Gross Profit Prior Year (PY)],
+    [Gross Profit Prior Year (PY)],
+    BLANK()
+)
+/*
+Format: +0.0%;-0.0%;"0.0%"
+Description: Year-over-year gross profit growth percentage.
+*/

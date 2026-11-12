@@ -1,0 +1,149 @@
+{
+  "config": "{\"version\":\"5.53\",\"themeCollection\":{\"baseTheme\":{\"name\":\"User\",\"version\":\"5.53\",\"type\":2}},\"activeSectionIndex\":0,\"defaultDrillFilterOtherVisuals\":true}",
+  "layoutOptimization": 0,
+  "sections": [
+    {
+      "name": "ReportSection_RP01",
+      "displayName": "RP-01 Executive Overview",
+      "filters": "[]",
+      "ordinal": 0,
+      "width": 1280.0,
+      "height": 720.0,
+      "visualContainers": [
+        {
+          "x": 20.0,
+          "y": 15.0,
+          "z": 1000.0,
+          "width": 1240.0,
+          "height": 60.0,
+          "config": "{\"name\":\"HeaderCard\",\"singleVisual\":{\"visualType\":\"textbox\",\"general\":{\"title\":\"Enterprise Sales & Revenue Intelligence | Executive Overview\"}}}"
+        },
+        {
+          "x": 20.0,
+          "y": 90.0,
+          "z": 2000.0,
+          "width": 190.0,
+          "height": 110.0,
+          "config": "{\"name\":\"KPICard_NetRevenue\",\"singleVisual\":{\"visualType\":\"card\",\"projections\":{\"Values\":[{\"queryRef\":\"FactSales.TotalNetRevenue\"}]}}}"
+        },
+        {
+          "x": 230.0,
+          "y": 90.0,
+          "z": 2001.0,
+          "width": 190.0,
+          "height": 110.0,
+          "config": "{\"name\":\"KPICard_GrossProfit\",\"singleVisual\":{\"visualType\":\"card\",\"projections\":{\"Values\":[{\"queryRef\":\"FactSales.TotalGrossProfit\"}]}}}"
+        },
+        {
+          "x": 440.0,
+          "y": 90.0,
+          "z": 2002.0,
+          "width": 190.0,
+          "height": 110.0,
+          "config": "{\"name\":\"KPICard_GrossMargin\",\"singleVisual\":{\"visualType\":\"card\",\"projections\":{\"Values\":[{\"queryRef\":\"FactSales.GrossMarginPct\"}]}}}"
+        },
+        {
+          "x": 650.0,
+          "y": 90.0,
+          "z": 2003.0,
+          "width": 190.0,
+          "height": 110.0,
+          "config": "{\"name\":\"KPICard_OrderCount\",\"singleVisual\":{\"visualType\":\"card\",\"projections\":{\"Values\":[{\"queryRef\":\"FactSales.DistinctOrderCount\"}]}}}"
+        },
+        {
+          "x": 860.0,
+          "y": 90.0,
+          "z": 2004.0,
+          "width": 190.0,
+          "height": 110.0,
+          "config": "{\"name\":\"KPICard_AOV\",\"singleVisual\":{\"visualType\":\"card\",\"projections\":{\"Values\":[{\"queryRef\":\"FactSales.AverageOrderValue\"}]}}}"
+        },
+        {
+          "x": 1070.0,
+          "y": 90.0,
+          "z": 2005.0,
+          "width": 190.0,
+          "height": 110.0,
+          "config": "{\"name\":\"KPICard_TargetAttainment\",\"singleVisual\":{\"visualType\":\"card\",\"projections\":{\"Values\":[{\"queryRef\":\"FactTargets.RevenueTargetAttainmentPct\"}]}}}"
+        },
+        {
+          "x": 20.0,
+          "y": 220.0,
+          "z": 3000.0,
+          "width": 780.0,
+          "height": 280.0,
+          "config": "{\"name\":\"Chart_MonthlyTrend\",\"singleVisual\":{\"visualType\":\"lineChart\",\"projections\":{\"Category\":[{\"queryRef\":\"DimDate.YearMonth\"}],\"Y\":[{\"queryRef\":\"FactSales.TotalNetRevenue\"},{\"queryRef\":\"FactTargets.TotalRevenueTarget\"}]}}}"
+        },
+        {
+          "x": 820.0,
+          "y": 220.0,
+          "z": 3001.0,
+          "width": 440.0,
+          "height": 280.0,
+          "config": "{\"name\":\"Chart_RegionRevenue\",\"singleVisual\":{\"visualType\":\"donutChart\",\"projections\":{\"Category\":[{\"queryRef\":\"DimTerritory.Region\"}],\"Y\":[{\"queryRef\":\"FactSales.TotalNetRevenue\"}]}}}"
+        },
+        {
+          "x": 20.0,
+          "y": 515.0,
+          "z": 3002.0,
+          "width": 600.0,
+          "height": 190.0,
+          "config": "{\"name\":\"Table_TopProducts\",\"singleVisual\":{\"visualType\":\"tableEx\",\"projections\":{\"Values\":[{\"queryRef\":\"DimProduct.ProductName\"},{\"queryRef\":\"FactSales.TotalNetRevenue\"},{\"queryRef\":\"FactSales.TotalGrossProfit\"},{\"queryRef\":\"FactSales.GrossMarginPct\"}]}}}"
+        },
+        {
+          "x": 640.0,
+          "y": 515.0,
+          "z": 3003.0,
+          "width": 620.0,
+          "height": 190.0,
+          "config": "{\"name\":\"Chart_CategoryMargin\",\"singleVisual\":{\"visualType\":\"columnChart\",\"projections\":{\"Category\":[{\"queryRef\":\"DimProduct.Category\"}],\"Y\":[{\"queryRef\":\"FactSales.TotalNetRevenue\"},{\"queryRef\":\"FactSales.TotalGrossProfit\"}]}}}"
+        }
+      ]
+    },
+    {
+      "name": "ReportSection_RP02",
+      "displayName": "RP-02 Sales Performance",
+      "filters": "[]",
+      "ordinal": 1,
+      "width": 1280.0,
+      "height": 720.0,
+      "visualContainers": []
+    },
+    {
+      "name": "ReportSection_RP03",
+      "displayName": "RP-03 Product Performance",
+      "filters": "[]",
+      "ordinal": 2,
+      "width": 1280.0,
+      "height": 720.0,
+      "visualContainers": []
+    },
+    {
+      "name": "ReportSection_RP04",
+      "displayName": "RP-04 Customer Insights",
+      "filters": "[]",
+      "ordinal": 3,
+      "width": 1280.0,
+      "height": 720.0,
+      "visualContainers": []
+    },
+    {
+      "name": "ReportSection_RP05",
+      "displayName": "RP-05 Revenue & Profitability",
+      "filters": "[]",
+      "ordinal": 4,
+      "width": 1280.0,
+      "height": 720.0,
+      "visualContainers": []
+    },
+    {
+      "name": "ReportSection_RP06",
+      "displayName": "RP-06 Transaction Detail",
+      "filters": "[]",
+      "ordinal": 5,
+      "width": 1280.0,
+      "height": 720.0,
+      "visualContainers": []
+    }
+  ]
+}

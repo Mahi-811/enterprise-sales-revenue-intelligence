@@ -1,0 +1,93 @@
+// ============================================================================
+// Enterprise Sales & Revenue Intelligence System
+// 01_base_measures.dax: Fundamental Sales & Transaction Measures
+// SRS Reference: Section 4 (FR-05) & Appendix A (KPI Definitions)
+// ============================================================================
+
+[Total Gross Sales] = 
+SUMX(
+    FactSales,
+    FactSales[Quantity] * FactSales[UnitPrice]
+)
+/*
+Format: \$#,##0.00;(\$#,##0.00);"-"
+Description: Total undiscounted value of sales lines.
+*/
+
+[Total Discount Amount] = 
+SUM(FactSales[DiscountAmount])
+/*
+Format: \$#,##0.00;(\$#,##0.00);"-"
+Description: Aggregate dollar value of discounts granted across all transaction lines.
+*/
+
+[Total Net Revenue] = 
+[Total Gross Sales] - [Total Discount Amount]
+/*
+Format: \$#,##0.00;(\$#,##0.00);"-"
+Description: Primary top-line revenue KPI, defined as Gross Sales less line discounts.
+*/
+
+[Total Cost of Goods Sold] = 
+SUMX(
+    FactSales,
+    FactSales[Quantity] * FactSales[UnitCost]
+)
+/*
+Format: \$#,##0.00;(\$#,##0.00);"-"
+Description: Aggregate standard cost of all goods sold or delivered.
+*/
+
+[Total Units Sold] = 
+SUM(FactSales[Quantity])
+/*
+Format: #,##0
+Description: Total physical units sold across orders.
+*/
+
+[Distinct Order Count] = 
+DISTINCTCOUNT(FactSales[OrderID])
+/*
+Format: #,##0
+Description: Number of unique purchase orders placed by customers.
+*/
+
+[Total Transaction Lines] = 
+COUNTROWS(FactSales)
+/*
+Format: #,##0
+Description: Total line items across all customer orders.
+*/
+
+[Average Order Value] = 
+DIVIDE(
+    [Total Net Revenue],
+    [Distinct Order Count],
+    BLANK()
+)
+/*
+Format: \$#,##0.00;(\$#,##0.00);"-"
+Description: Average net recognized revenue generated per distinct purchase order.
+*/
+
+[Average Selling Price] = 
+DIVIDE(
+    [Total Gross Sales],
+    [Total Units Sold],
+    BLANK()
+)
+/*
+Format: \$#,##0.00;(\$#,##0.00);"-"
+Description: Average gross price per physical unit sold.
+*/
+
+[Overall Discount Rate %] = 
+DIVIDE(
+    [Total Discount Amount],
+    [Total Gross Sales],
+    0
+)
+/*
+Format: 0.0%
+Description: Discount percentage granted relative to total gross sales.
+*/
